@@ -13,6 +13,7 @@ target 'InstagramLikeApp' do
   pod 'Firebase/Database'
   pod 'Firebase/Analytics'
   pod 'Firebase/Crashlytics'
+  pod 'Firebase/Storage'
 
   # Pods for InstagramLikeApp
 
