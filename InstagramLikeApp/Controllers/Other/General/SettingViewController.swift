@@ -5,6 +5,7 @@
 //  Created by hideto c. on 2021/06/10.
 //
 
+import SafariServices
 import UIKit
 
 struct SettingModel {
@@ -44,12 +45,70 @@ final class SettingViewController: UIViewController {
     }
     
     private func configureModels() {
-        let section = [
+        data.append([
+            SettingModel(title: "Edit Profile") { [weak self] in
+                self?.didTapEditProfile()
+            },
+            SettingModel(title: "Invite Friends") { [weak self] in
+                self?.didTapInviteFriends()
+            },
+            SettingModel(title: "Save Original Posts") { [weak self] in
+                self?.didTapSaveOriginalPosts()
+            }
+        ])
+        
+        data.append([
+            SettingModel(title: "Terms of Service") { [weak self] in
+                self?.openURL(type: .terms)
+            },
+            SettingModel(title: "Privacy Poliscy") { [weak self] in
+                self?.openURL(type: .privacy)
+            },
+            SettingModel(title: "Help / Feedback") { [weak self] in
+                self?.openURL(type: .help)
+            }
+        ])
+        
+        data.append([
             SettingModel(title: "Log Out") { [weak self] in
                 self?.didTapLogOut()
             }
-        ]
-        data.append(section)
+        ])
+    }
+    
+    enum SettingURLType {
+        case terms, privacy, help
+    }
+    
+    private func openURL(type: SettingURLType) {
+        let urlString: String
+        switch type {
+        case .terms: urlString = "https://www.instagram.com/terms/accept/?hl=ja"
+        case .privacy: urlString = "https://help.instagram.com/519522125107875"
+        case .help: urlString = "https://help.instagram.com/"
+        }
+        
+        guard let url = URL(string: urlString) else {
+            return
+        }
+        
+        let vc = SFSafariViewController(url: url)
+        present(vc, animated: true)
+    }
+    
+    private func didTapSaveOriginalPosts() {
+        
+    }
+    
+    private func didTapInviteFriends() {
+        
+    }
+    
+    private func didTapEditProfile() {
+        let vc = EditProfileViewController()
+        vc.title = "Edit Profile"
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true)
     }
     
     private func didTapLogOut() {
@@ -96,6 +155,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = data[indexPath.section][indexPath.row].title
+        cell.accessoryType = .disclosureIndicator
         
         return cell
     }
